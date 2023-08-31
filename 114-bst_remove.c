@@ -18,30 +18,34 @@ bst_t *bst_remove(bst_t *root, int value)
 	if (found_node == NULL)
 		return (root);
 	grand_child = find_grand_child(found_node);
-
 	if (grand_child == NULL)
-	{
-		if (found_node->parent == NULL)
-		{
-			root = (found_node->left != NULL) ? found_node->left : found_node->right;
-		}
-		else if (found_node->parent->left == found_node)
-		{
-			found_node->parent->left = (found_node->left != NULL) ?
-			found_node->left : found_node->right;
-		}
-		else
-		{
-			found_node->parent->right = (found_node->left != NULL) ?
-			found_node->left : found_node->right;
-		}
-		free(found_node);
 		return (root);
+	if (found_node->left == grand_child)
+		grand_child->left = NULL;
+	else
+		grand_child->left = found_node->left;
+	if (found_node->right == grand_child)
+		grand_child->right = NULL;
+	else
+		grand_child->right = found_node->right;
+	grand_child->parent->left = NULL; /**/
+	grand_child->parent = found_node->parent;
+	if (grand_child->right != NULL)
+		grand_child->right->parent = grand_child;
+	if (grand_child->left != NULL)
+		grand_child->left->parent = grand_child;
+	if (grand_child->parent == NULL)
+	{
+		free(found_node);
+		return (grand_child);
 	}
-
+	if (found_node->parent->n > value)
+		found_node->parent->left = grand_child;
+	else
+		found_node->parent->right = grand_child;
+	free(found_node);
 	return (root);
 }
-
 
 /**
  * find_grand_child - Finds the grand child of a node.
@@ -66,24 +70,15 @@ bst_t *find_grand_child(bst_t *node)
 	if (node->right != NULL)
 	{
 		tmp = node->right;
-		if (tmp->left != NULL)
-			grand_child = tmp->left;
-		else
-			grand_child = tmp->right;
+		grand_child = node->right->left;
 	}
 	else if (node->left != NULL)
 	{
 		tmp = node->left;
-		if (tmp->left != NULL)
-			grand_child = tmp->left;
-		else
-			grand_child = tmp->right;
+		grand_child = node->left->left;
 	}
-	else
-	{
-		grand_child = NULL;
-	}
-
+	if (grand_child == NULL)
+		grand_child = tmp;
 	return (grand_child);
 }
 
