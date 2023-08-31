@@ -1,10 +1,6 @@
 #include "binary_trees.h"
 #include <stdio.h>
 
-void tree_traverse(queue_t **head, void (*func)(int));
-void add_to_queue(queue_t **queue,  binary_tree_t *child);
-queue_t *pop(queue_t **queue);
-
 /**
  * binary_tree_levelorder - Prints a tree in a level by level order.
  * @tree: Pointer to the root node of the tree to traverse.
