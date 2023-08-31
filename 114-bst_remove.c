@@ -66,15 +66,24 @@ bst_t *find_grand_child(bst_t *node)
 	if (node->right != NULL)
 	{
 		tmp = node->right;
-		grand_child = node->right->left;
+		if (tmp->left != NULL)
+			grand_child = tmp->left;
+		else
+			grand_child = tmp->right;
 	}
 	else if (node->left != NULL)
 	{
 		tmp = node->left;
-		grand_child = node->left->left;
+		if (tmp->left != NULL)
+			grand_child = tmp->left;
+		else
+			grand_child = tmp->right;
 	}
-	if (grand_child == NULL)
-		grand_child = tmp;
+	else
+	{
+		grand_child = NULL;
+	}
+
 	return (grand_child);
 }
 
